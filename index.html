@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Neuron · облачный чат</title>
+    <title>⚡ Neuron · чат</title>
     <style>
         * {
             margin: 0;
@@ -100,6 +100,7 @@
             font-size: 1rem;
         }
 
+        /* экран входа */
         .welcome-screen {
             position: fixed;
             top: 0;
@@ -579,646 +580,553 @@
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firestatic.com/firebasejs/8.10.0/firebase-database.jsbasejs/8.10.0/firebase-database.js"></script>
-
     <script>
         (function() {
-            //"></script>
-
-    <script>
-        (function() {
- ========== FIREBASE КОНФИГ ==========
-            const firebase            // ========== FIREBASE КОНФИГ ==========
-            const firebaseConfig =Config = {
-                apiKey: "AIza {
-                apiKey: "AIzaSyDN7Q3JvYpSyDN7Q3JvYpYQqYQqYQqYQqYQqYQqYQqYQqY",
-                authYQqYQqYQqYQqYQqYQqYQqYQqY",
-                authDomain: "neuron-chat.firebaseapp.com",
-Domain: "neuron-chat.firebaseapp.com",
-                databaseURL: "https://neuron-chat-default                databaseURL: "https://neuron-chat-default-rtdb.firebaseio.com",
-                projectId: "ne-rtdb.firebaseio.com",
-                projectId: "neuron-chat",
-                storageBucket:uron-chat",
-                storageBucket: "neuron-chat.appspot.com",
-                messagingSenderId: "123456789012",
-                appId: "1:123456789012:web:abc123def456 "neuron-chat.appspot.com",
-                messagingSenderId: "123456789012",
-                appId: "1:123456789012:web:abc123def456"
-            };
-
-            // ИНИЦИАЛИЗАЦИЯ FIREBASE
-            firebase.initializeApp(firebase"
-            };
-
-            // ИНИЦИАЛИЗАЦИЯ FIREBASE
-            firebase.initializeApp(firebaseConfig);
-            const database = firebase.database();
-
             const CHATS = [
-                { id: 1, name:Config);
-            const database = firebase.database();
-
-            const CHATS = [
-                { id: 1, name: 'Чат 1', emoji: ' 'Чат 1', emoji: '💬' },
-                { id: 2, name💬' },
-                { id: 2, name: 'Чат 2: 'Чат 2', emoji: '💬' },
-                { id', emoji: '💬' },
-                { id: 3, name: 'Чат 3',: 3, name: 'Чат 3', emoji: '💬' },
-                { id: 4, name emoji: '💬' },
+                { id: 1, name: 'Чат 1', emoji: '💬' },
+                { id: 2, name: 'Чат 2', emoji: '💬' },
+                { id: 3, name: 'Чат 3', emoji: '💬' },
                 { id: 4, name: 'Чат 4', emoji: '💬' },
-                { id: 5, name: 'Чат 5',: 'Чат 4', emoji: '💬' },
                 { id: 5, name: 'Чат 5', emoji: '💬' },
-                { emoji: '💬' },
-                { id: 6, name: 'Чат 6 id: 6, name: 'Чат 6', emoji: '💬'', emoji: '💬' },
-                { id: 7, name: },
-                { id: 7, name: 'Чат 7', emoji 'Чат 7', emoji: '💬: '💬' },
-                { id: 8' },
-                { id: 8, name: ', name: 'Чат 8', emoji: '💬' }
+                { id: 6, name: 'Чат 6', emoji: '💬' },
+                { id: 7, name: 'Чат 7', emoji: '💬' },
+                { id: 8, name: 'Чат 8', emoji: '💬' }
             ];
 
-            const NICK_KEY = 'Чат 8', emoji: '💬' }
-            ];
-
+            const STORAGE_KEY = 'neuron_messages_final';
             const NICK_KEY = 'neuron_nick';
-            const CHneuron_nick';
             const CHAT_KEY = 'neuron_current_chat';
 
-AT_KEY = 'neuron_current_chat';
-
-            let nickname = localStorage.getItem(NICK            let nickname = localStorage.getItem(NICK_KEY) || '';
-            let currentChatId =_KEY) || '';
-            let currentChatId = parseInt(localStorage.getItem(CH parseInt(localStorage.getItem(CHAT_KEY)) ||AT_KEY)) || 1;
+            let nickname = localStorage.getItem(NICK_KEY) || '';
+            let currentChatId = parseInt(localStorage.getItem(CHAT_KEY)) || 1;
+            let messages = {};
 
             // элементы
-            const welcome 1;
-
-            // элементы
-            const welcomeScreen = document.getElementById('welcomeScreenScreen = document.getElementById('w');
-            const chatChoiceScreen = document.getElementById('chatChoiceScreen');
-            const mainChatScreen = document.getElementById('mainChatScreenelcomeScreen');
+            const welcomeScreen = document.getElementById('welcomeScreen');
             const chatChoiceScreen = document.getElementById('chatChoiceScreen');
             const mainChatScreen = document.getElementById('mainChatScreen');
             const userName = document.getElementById('userName');
             const userAvatar = document.getElementById('userAvatar');
-');
-            const userName = document.getElementById('userName');
-            const userAvatar = document.getElementById('userAvatar');
             const userButton = document.getElementById('userButton');
-                       const userButton = document.getElementById('userButton');
-            const nameModal = document.getElementById const nameModal = document.getElementById('nameModal');
-            const modalNameInput =('nameModal');
+            const nameModal = document.getElementById('nameModal');
             const modalNameInput = document.getElementById('modalNameInput');
-            document.getElementById('modalNameInput');
-            const modalSaveBtn const modalSaveBtn = document = document.getElementById('modalSaveBtn');
-            const modalCancel.getElementById('modalSaveBtn');
+            const modalSaveBtn = document.getElementById('modalSaveBtn');
             const modalCancelBtn = document.getElementById('modalCancelBtn');
-           Btn = document.getElementById('modalCancelBtn');
-            const welcomeNickInput = document.getElementById('welcome const welcomeNickInputNickInput');
-            const welcomeEnterBtn = document.getElementById('welcomeNickInput');
+            const welcomeNickInput = document.getElementById('welcomeNickInput');
             const welcomeEnterBtn = document.getElementById('welcomeEnterBtn');
-            const chats = document.getElementById('welcomeEnterBtn');
             const chatsGrid = document.getElementById('chatsGrid');
-           Grid = document.getElementById('chatsGrid');
-            const currentChatEmoji = document.getElementById('currentChatEm const currentChatEmoji = document.getElementById('currentChatEmoji');
-            const currentChatName = document.getElementById('currentoji');
+            const currentChatEmoji = document.getElementById('currentChatEmoji');
             const currentChatName = document.getElementById('currentChatName');
             const changeChatBtn = document.getElementById('changeChatBtn');
-            const messagesContainer = document.getElementById('messagesContainerChatName');
-            const changeChatBtn = document.getElementById('changeChatBtn');
-            const messagesContainer = document.getElementById('');
-            const messageInput = document.getElementByIdmessagesContainer');
+            const messagesContainer = document.getElementById('messagesContainer');
             const messageInput = document.getElementById('messageInput');
-            const sendMsgBtn = document.getElementById('messageInput');
-            const sendMsgBtn = document.getElementById('sendMsgBtn('sendMsgBtn');
+            const sendMsgBtn = document.getElementById('sendMsgBtn');
             const fileInput = document.getElementById('fileInput');
             const fileButton = document.getElementById('fileButton');
 
-            // форматирование');
-            const fileInput = document.getElementById('fileInput');
-            const fileButton = document.getElementById('fileButton');
+            // загрузка сообщений из localStorage
+            function loadMessages() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    try {
+                        messages = JSON.parse(saved);
+                    } catch { messages = {}; }
+                }
+                // инициализация пустых массивов для всех чатов
+                CHATS.forEach(chat => {
+                    const key = 'chat_' + chat.id;
+                    if (!messages[key]) messages[key] = [];
+                });
+            }
 
-            // форматирование размера файла размера файла
+            function saveMessages() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+            }
+
+            // форматирование размера файла
             function formatFileSize(bytes) {
-                if (bytes === 0
-            function formatFileSize(bytes) {
-                if (bytes === 0) return '0) return '0 B';
-                const k = 102 B';
-                const k = 10244;
-                const sizes = ['B', 'KB', 'MB', ';
+                if (bytes === 0) return '0 B';
+                const k = 1024;
                 const sizes = ['B', 'KB', 'MB', 'GB'];
-                const i = Math.floorGB'];
                 const i = Math.floor(Math.log(bytes) / Math.log(k));
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
             }
 
             // отрисовка сообщений
-            function renderMessage(msg) {
-                const div = document.createElement('(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-            }
+            function renderMessages() {
+                const key = 'chat_' + currentChatId;
+                const chatMessages = messages[key] || [];
+                
+                // сортировка по времени
+                chatMessages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                
+                messagesContainer.innerHTML = '';
 
-            // отрисовка сообщений
-            function renderMessage(msg) {
-                const div = document.createElement('div');
-                div.className = `message ${div');
-                div.className = `message ${msg.author === nickname ? 'own' : ''}`;
-                div.id = `msg-${msg.author === nickname ? 'own' : ''}`;
-                div.id = `msg-${msg.id}`;
-
-                let content = `<div class="msg-author">${escapeHTMLmsg.id}`;
-
-                let content = `<div class="msg-author">${escapeHTML(msg.author)}</div>`;
-
-                if (msg.text(msg.author)}</div>`;
-
-                if (msg.text) {
-                    content += `<div class) {
-                    content += `<div class="msg-text">${escapeHTML(msg.text)}</div>`;
-="msg-text">${escapeHTML(msg.text)}</div                }
-
-                if (msg.file)>`;
+                if (chatMessages.length === 0) {
+                    messagesContainer.innerHTML = '<div class="empty-chat">💬 нет сообщений...</div>';
+                    return;
                 }
 
-                if (msg.file) {
-                    if (msg.file.type && msg.file {
-                    if (msg.file.type && msg.file.type.startsWith('image/')) {
-.type.startsWith('image/')) {
-                        content                        content += `<img src="${escapeHTML(msg.file.data += `<img src="${escapeHTML(msg.file.data)}" class="file-image" onclick="window)}" class="file-image" onclick="window.open(this.src)">`;
-                    } else {
-                        content.open(this.src)">`;
-                    } else {
-                        content += `
-                            <div class="file += `
-                            <div class="file-attachment" onclick="window.open('${escapeHTML(msg-attachment" onclick="window.open('${escapeHTML(msg.file.data)}')">
-                                <div class=".file.data)}')">
-                                <div class="file-iconfile-icon">📎</div>
-                                <div class">📎</div>
-                                <div class="file-info">
-                                    <div class="file="file-info">
-                                    <div class="file-name">${escapeHTML(msg.file.name-name">${escapeHTML(msg.file.name)}</div>
-                                    <div class="file)}</div>
-                                    <div class="file-size">${escapeHTML(msg.file.size)}</div>
--size">${escapeHTML(msg.file.size)}</div>
+                chatMessages.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = `message ${msg.author === nickname ? 'own' : ''}`;
+                    div.id = `msg-${msg.id}`;
+
+                    let content = `<div class="msg-author">${escapeHTML(msg.author)}</div>`;
+
+                    if (msg.text) {
+                        content += `<div class="msg-text">${escapeHTML(msg.text)}</div>`;
+                    }
+
+                    if (msg.file) {
+                        if (msg.file.type && if (msg.file.type && msg.file msg.file.type.startsWith('image/')) {
+                            content += `<img src.type.startsWith('image/')) {
+                            content += `<img src="${escapeHTML(msg.file.data="${escapeHTML(msg.file.data)}" class="file-image" onclick="window)}" class="file-image" onclick="window.open(this.src)">`;
+                        }.open(this.src)">`;
+                        } else {
+                            content += `
+                                <div class else {
+                            content += `
+                                <div class="file-attachment" onclick="window.open('${escapeHTML(msg.file.data="file-attachment" onclick="window.open('${escapeHTML(msg.file.data)}')">
+                                    <div class="file-icon">📎</div>
+                                    <div class="file-info">
+                                        <div class)}')">
+                                    <div class="file-icon">📎</div>
+                                    <div class="file-info">
+                                       ="file-name">${escapeHTML(msg.file.name)}</div>
+                                        <div class="file-size">${escapeHTML(msg.file.size <div class="file-name">${escapeHTML(msg.file.name)}</div>
+                                        <div class="file-size">${escapeHTML(msg.file.size)}</div>
+                                    </div>
+                                </)}</div>
+                                    </div>
                                 </div>
-                            </div>
-                                </div>
-                            </div>
-                        `;
+                            `;
+                        }
+                   div>
+                            `;
+                        }
                     }
-                }
 
-                content += `<div class="msg-time                        `;
-                    }
-                }
+                    content += `<div }
 
-                content += `<div class="msg-time">${escapeHTML(msg.time">${escapeHTML(msg.time)}</div>`;
-                div.innerHTML)}</div>`;
-                = content;
-                div.innerHTML = content;
-                return div return div;
+                    content += `<div class="msg-time">${escapeHTML(msg.time class="msg-time">${escapeHTML(msg.time)}</div>`;
+                   )}</div>`;
+                    div.innerHTML = content;
+                    messagesContainer.appendChild(div);
+ div.innerHTML = content;
+                    messagesContainer.appendChild(                });
+
+                messagesContainer.scdiv);
+                });
+
+                messagesContainer.scrollToprollTop = messagesContainer.scrollHeight;
             }
 
-            // под;
+            // добавление сооб = messagesContainer.scrollHeight;
             }
-
-            // подписка на сообщения из Firebase
-писка на сообщения из Firebase
-            function            function subscribeToChat(chatId) {
- subscribeToChat(chatId) {
-                const                const chatRef = database.ref('chats/chat_' + chatId);
-                
-                chatRef.off(); // отписываемся от chatRef = database.ref('chats/chat_' + chatId);
-                
-                chatRef.off(); // отписываем предыдущего чата
-                
-                chatRef.on('child_added', (snapshot) => {
-                    const msgся от предыдущего чата
-                
-                chatRef.on('child_added', (snapshot) => {
-                    = snapshot.val();
-                    const existingMsg = document.getElementById(`msg const msg = snapshot.val();
-                    const existingMsg = document.getElementById(`msg-${msg.id}`);
-                    if (!-${msg.id}`);
-                    if (!existingMsg) {
-                        const msgDiv = renderMessage(msgexistingMsg) {
-                        const msgDiv = renderMessage(msg);
-                        messagesContainer.appendChild(msgDiv);
-                        messages);
-                        messagesContainer.appendChild(msgDiv);
-                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                   Container.scrollTop = messagesContainer.scrollHeight;
-                    }
-                });
-
-                // загружаем }
-                });
-
-                // загружаем послед последние 50 сообщений приние 50 сообщений при входе
-                chatRef.l входе
-                chatRef.limitToLast(50).once('valueimitToLast(50).once('value', (snapshot) => {
-                    messagesContainer.innerHTML = '';
-                    const', (snapshot) => {
-                    messagesContainer.innerHTML = '';
-                    const messages = [];
-                    snapshot.forEach((child messages = [];
-                    snapshot.forEach((child)) => {
- => {
-                        messages.push(child.val());
-                    });
-                    // сор                        messages.push(child.val());
-                    });
-                    // сортируем по времени
-                    messages.sort((a, b) => a.timestamp - b.tтируем по времени
-                    messages.sort((a, b) => a.timestamp - b.timestamp);
-                   imestamp);
-                    messages.forEach(msg => {
-                        messagesContainer.appendChild(renderMessage(msg));
-                    messages.forEach(msg => {
-                        messagesContainer.appendChild(renderMessage(msg));
-                    });
-                    messagesContainer.scroll });
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                });
-           Top = messagesContainer.scrollHeight;
-                });
-            }
-
-            // }
 
             // добавление сообщения
-            добавление сообщения
-            function addMessage(text = '', function addMessage(text = '', fileData = null) {
-                const fileData = null) {
-                const chatRef = database.ref('chats/chat_' + currentChat chatRef = database.ref('chats/chat_' + currentChatId);
+щения
+            function addMessage(text = '', file            function addMessage(text = '', fileData =Data = null) {
+                const key null) {
+                const key = 'chat_' + current = 'chat_' + currentChatId;
+                
+                constChatId;
                 
                 const msg = {
-                    id:Id);
-                
-                const msg = {
-                    id: Date.now() + '-' + Math Date.now() + '-' + Math.random().toString(36).substr.random().toString(36).substr(2, 9),
+                    id: Date.now() + msg = {
+                    id: Date.now() + '-' + Math.random().toString(36).substr( '-' + Math.random().toString(36).substr(2, 9),
+                    author: nickname ||2, 9),
                     author: nickname || 'аноним',
-(2, 9),
-                    author: nickname || 'ано                    time: new Date().toLocaleTimeStringним',
-                    time: new Date().toLocaleTimeString('ru-RU', {('ru-RU', { hour: '2-digit', minute: '2 hour: '2-digit', minute: '2-digit' }),
-                    timestamp: firebase-digit' }),
-                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                    time: new Date 'аноним',
+                    time: new Date().toLocaleTimeString('ru-RU',().toLocaleTimeString('ru-RU', { hour: '2-digit { hour: '2-digit', minute: '2-digit' }),
+                    timestamp: Date.now()
                 };
 
-               .database.ServerValue.TIMESTAMP
+', minute: '2-digit' }),
+                    timestamp: Date.now()
                 };
 
-                if (text) msg.text = text if (text) msg.text = text;
-                if (fileData) msg;
-                if (fileData) msg.file = fileData;
+                if (text) msg.text = text;
+                if (text) msg.text = text;
+                if                if (fileData) msg.file = fileData;
 
-                chatRef.push(msg);
-            }
+ (fileData) msg.file = fileData;
 
-            // обработка фай.file = fileData;
-
-                chatRef.push(msg);
+                messages                messages[key].push(msg);
+                saveMessages();
+               [key].push(msg);
+                saveMessages();
+                renderMessages renderMessages();
             }
 
             // обработка файла
-            fileButton.addEventListener('click', () => {
+();
+            }
+
+            // обработка файла
+            fileButton.addEventListener('click            fileButton.addEventListener('click', () => {
+                file', () => {
                 fileInput.click();
             });
 
-            fileInputла
-            fileButton.addEventListener('click', () => {
-                fileInput.click();
+           Input.click();
             });
 
-            file.addEventListener('change', (e) => {
-               Input.addEventListener('change', (e) => {
-                const file = e.target.f const file = e.target.files[0];
-                if (!file) return;
+            fileInput.addEventListener('change', fileInput.addEventListener('change', (e) => (e) => {
+                const file {
+                const file = e.target.f = e.target.files[0];
+iles[0];
+                if (!file                if (!file) return;
 
-               iles[0];
-                if (!file) return;
+                const reader) return;
 
-                const reader = new FileReader();
-                reader.onload = const reader = new FileReader();
-                reader.onload = (ev) => {
+                const reader = new = new FileReader();
+                FileReader();
+                reader.onload = (ev) => reader.onload = (ev) => {
                     addMessage('', {
-                        name: file.name,
-                        (ev) => {
-                    addMessage('', {
+                        {
+                    addMessage('', name: file.name,
+                        {
                         name: file.name,
                         size: formatFileSize(file size: formatFileSize(file.size),
                         type: file.type,
-.size),
+                        data.size),
                         type: file.type,
-                        data                        data: ev.target.result
+                        data: ev.target.result
+                   : ev.target.result
                     });
-                    fileInput.value = '';
+                    fileInput.value = });
+                    fileInput '';
+               .value = '';
                 };
-                reader.readAsData: ev.target.result
-                    });
-                    fileInput.value = '';
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL reader.readAsDataURL(file(file);
             });
 
-            // отрисовка сетки чаURL(file);
+            // от);
             });
 
-            // отрисовка сетки чатов
-            function renderChatsGridтов
+            // отрисовка сетки чарисовка сетки чатов
             function renderChatsGrid() {
-                chatsGrid.innerHTML() {
                 chatsGrid.innerHTML = '';
-                CHATS.forEach = '';
+тов
+            function renderChatsGrid() {
+                chatsGrid.innerHTML = '';
                 CHATS.forEach(chat => {
-                    const card = document(chat => {
-                    const card = document.createElement('div');
-                    card.className = 'chat-item';
-.createElement('div');
-                    card.className = 'chat                    card.dataset.chatId = chat.id-item';
+                    const                CHATS.forEach(chat => {
+                    const card = card = document.createElement('div');
+                    card.className = document.createElement('div');
+                    card.className = 'chat 'chat-item';
+                    card.dataset.chatId =-item';
                     card.dataset.chatId = chat.id;
                     card.innerHTML = `
-                        <span class;
+ chat.id;
                     card.innerHTML = `
-                        <span class="chat-emoji">${chat="chat-emoji">${chat.emoji}</span>
-                        <span class="chat.emoji}</span>
-                        <span class="chat-name">${chat.name}</span>
+                        <span class="chat                        <span class-emoji">${chat="chat-emoji">${chat.emo.emoji}</span>
+ji}</span>
+                        <span class                        <span class="chat-name">${chat="chat-name">${chat.name}</.name}</span>
+                    `span>
                     `;
-                   -name">${chat.name}</span>
-                    `;
-                    card.addEventListener('click', () card.addEventListener('click', () => {
+                   ;
+                    card.addEventListener('click', () card.addEventListener('click => {
+                        currentChatId', () => {
                         currentChatId = chat.id;
-                        localStorage => {
-                        currentChatId = chat.id;
-                        localStorage.setItem(CHAT_KEY, currentChatId);
-                        const.setItem(CHAT_KEY, currentChat currentChat = CHATS.find(c => c.id === currentChatIdId);
-                        const currentChat = CHATS.find(c => c.id === current);
-                        currentChatEmoji.textContent = currentChat.emoji;
-                        currentChatName.textContent = currentChat.name;
-ChatId);
-                        currentChatEmoji.textContent = currentChat.emoji;
-                        currentChatName.textContent = currentChat.name;
+                        localStorage = chat.id;
+                        localStorage.setItem.setItem(CHAT_KEY,(CHAT_KEY, currentChatId);
+                        const currentChat currentChatId);
+                        const currentChat = CHATS.find(c => = CHATS.find(c => c.id === currentChatId);
+                        currentChatEmoji.textContent c.id === currentChatId);
+                        currentChatEmoji.textContent = currentChat.emoji = currentChat.emoji;
+                       ;
+                        currentChatName.textContent = currentChatName.textContent = currentChat.name;
                         
+                        chatChoiceScreen.classList currentChat.name;
                         
-                        chatChoiceScreen.classList.add('hidden');
-                        mainChatScreen.classList.remove('                        chatChoiceScreen.classList.add('hidden');
+                        chatChoiceScreen.classList.add('.add('hidden');
+                        mainChatScreen.classList.removehidden');
                         mainChatScreen.classList.remove('hidden');
                         
-                        subscribeToChat(currentChatIdhidden');
+('hidden');
                         
-                        subscribeToChat(current);
+                        renderMessages();
+                        renderMessages();
                     });
                     chatsGrid.appendChild(card);
                 });
-            }
-
-ChatId);
-                    });
+                               });
                     chatsGrid.appendChild(card);
                 });
             }
 
             function escapeHTML(str) {
-                           function escapeHTML(str) {
+                if }
+
+            function escapeHTML(str) {
                 if (!str) return '';
-                return str.replace(/[&<>"]/ if (!str) return '';
-                return str.replace(/[&<>"]/g, function(m) {
-                    if (m === '&') return '&amp;';
-                    if (m === '<') return 'g, function(m) {
-                    if (m === '&') return '&amp;';
-                    if (m === '<') return '&&lt;';
-                    if (m === '>') return '&gt;';
-                    if (m === '"') return 'lt;';
-                    if (m === '>') return '&gt;';
-                    if (m === '"')&quot;';
-                    return return '&quot;';
+                return str.replace(/[&<>"] (!str) return '';
+                return str.replace(/[&<>"]/g, function/g, function(m) {
+                   (m) {
+                    if (m === '&') return '& if (m === '&') return '&amp;';
+                    if (amp;';
+                    if (m === '<') return 'm === '<') return '&lt;';
+                    if&lt;';
+                    if (m === '>') return '&gt (m === '>') return '&gt;';
+                    if (m === '"') return;';
+                    if (m === '"') return '&quot;';
+                    '&quot;';
                     return m;
- m;
+                });
+            }
+
+            function updateUserDisplay return m;
                 });
             }
 
             function updateUserDisplay() {
-                userName.textContent =                });
-            }
-
-            function updateUserDisplay() {
-                userName.textContent = nickname || nickname || 'ник';
-                if (nickname && nickname.length > 0) {
-                    userAvatar.textContent = nickname.charAt(0). 'ник';
-                if (nickname && nickname.length > 0) {
-                    userAvatar.textContent = nickname.charAt(0).totoUpperCase();
+                userName.textContent() {
+                userName.textContent = nickname || 'ник';
+                if (nick = nickname || 'ник';
+                if (nickname && nickname.lengthname && nickname.length > 0) > 0) {
+                    userAvatar.textContent {
+                    userAvatar.textContent = nickname.charAt(0).toUpperCase = nickname.charAt(0).toUpperCase();
+                } else();
                 } else {
+                    userAvatar.textContent = ' {
                     userAvatar.textContent = '👤';
+               👤';
                 }
             }
 
-UpperCase();
-                } else {
-                    userAvatar.textContent = '👤';
-                }
+            function hideAllS }
             }
 
-            function            function hideAllScreens() {
-                chatChoiceScreen.classList.add hideAllScreens() {
-                chatChoiceScreen.classList.add('hidden('hidden');
-                mainChat');
+            function hideAllScreens()creens() {
+                chatChoiceScreen.classList.add(' {
+                chatChoiceScreen.classList.add('hidden');
+                mainChatScreen.classList.addhidden');
                 mainChatScreen.classList.add('hidden');
             }
 
-Screen.classList.add('hidden');
+           ('hidden');
             }
 
             function showChatChoice() {
-                hideAll            function showChatChoice() {
+ function showChatChoice() {
                 hideAllScreens();
-                chatChoiceScreen.classListScreens();
-                chatChoiceScreen.classList.remove('hidden');
-                renderChats.remove('hidden');
+                hideAllScreens();
+                chatChoiceScreen                chatChoiceScreen.classList.remove('hidden');
+                renderChatsGrid.classList.remove('hidden');
                 renderChatsGrid();
-Grid();
             }
 
-            // вход
-            welcomeEnterBtn.addEventListener('            }
+           ();
+            }
 
-            // вход
+            // ВХОД
+            welcomeEnterBtn.addEventListener // ВХОД
             welcomeEnterBtn.addEventListener('click', () => {
-                const nick = welcomeNickInputclick', () => {
+('click', () => {
+                const nick = welcomeNickInput.value.trim();
                 const nick = welcomeNickInput.value.trim();
                 if (nick) {
-                   .value.trim();
-                if (nick) {
+                    nickname                if (nick) {
                     nickname = nick;
-                    localStorage nickname = nick;
+                    localStorage.setItem(NICK_KEY = nick;
                     localStorage.setItem(NICK_KEY, nick);
-.setItem(NICK_KEY, nick);
+                    updateUserDisplay();
+                    welcome, nick);
                     updateUserDisplay();
                     welcomeScreen.classList.add('hidden');
+                    showScreen.classList.add('hidden');
                     showChatChoice();
+                } else {
+                   ChatChoice();
+                } else {
+                    alert('введи ник alert('введи ник');
                 }
             });
 
-            welcomeNickInput.addEventListener('                    updateUserDisplay();
-                    welcomeScreen.classList.add('hidden');
-                    showChatChoice();
+            welcomeNickInput.addEventListener');
                 }
             });
 
-            welcomeNickInputkeypress', (e) => {
-                if (e.key === 'Enter.addEventListener('keypress', (e) => {
+            welcomeNickInput.addEventListener('key('keypress', (e) => {
+                if (e.keypress', (e) => {
                 if (e.key === 'Enter') {
+                    welcomeEnter === 'Enter') {
                     welcomeEnterBtn.click();
+                }
+           Btn.click();
                 }
             });
 
-') {
-                    welcomeEnterBtn.click();
-                }
+            // смена имени
             });
 
-            // смена            // смена имени
-            userButton.addEventListener('click', () => {
-                if (!nick имени
-            userButton.addEventListener('click', () => {
+            // смена имени
+            userButton.addEventListener('click', () => userButton.addEventListener('click', () => {
+                if (! {
                 if (!nickname) return;
-                modalname) return;
+                modalNameInput.valuenickname) return;
                 modalNameInput.value = nickname;
-                nameNameInput.value = nickname;
-                nameModal.classList.remove('Modal.classList.remove('hidden');
+                nameModal = nickname;
+                nameModal.classList.remove('hidden.classList.remove('hidden');
             });
 
-            modalSaveBtnhidden');
+            modalSaveBtn.addEventListener('click', ()');
             });
 
             modalSaveBtn.addEventListener('click', () => {
-                const newNick = modalName.addEventListener('click', () => {
                 const newNick = modalNameInput.value.trim();
-                ifInput.value.trim();
+                if ( => {
+                const newNick = modalNameInput.value.trim();
                 if (newNick) {
-                    (newNick) {
                     nickname = newNick;
+newNick) {
                     nickname = newNick;
-                    localStorage.setItem(NICK_KEY, newNick);
- localStorage.setItem(NICK_KEY, newNick);
+                    localStorage.setItem(NICK                    localStorage.setItem(NICK_KEY, newNick);
                     updateUserDisplay();
-                                       updateUserDisplay();
-                    name nameModal.classList.add('hidden');
-               Modal.classList.add('hidden');
+_KEY, newNick);
+                    updateUserDisplay();
+                    nameModal.classList.add('hidden');
+                    nameModal.classList.add('hidden');
+                }
                 }
             });
 
-            modalCancelBtn.addEventListener('click }
-            });
+            modalCancelBtn.addEventListener('click', () =>            });
 
             modalCancelBtn.addEventListener('click', () => {
-                nameModal.classList', () => {
+                nameModal.classList.add('hidden {
                 nameModal.classList.add('hidden');
             });
 
-            name.add('hidden');
+            nameModal.addEventListener('');
             });
 
-            nameModal.addEventListener('click', (Modal.addEventListener('click', (e) => {
-                ife) => {
-                if (e.target === nameModal) {
-                    name (e.target === nameModal) {
+            nameModal.addEventListener('click', (e) => {
+               click', (e) => {
+                if (e.target if (e.target === nameModal) {
+                    nameModal === nameModal) {
                     nameModal.classList.add('hidden');
-Modal.classList.add('hidden');
+                }
+           .classList.add('hidden');
                 }
             });
 
             // смена чата
-                           }
-            });
+ });
 
             // смена чата
-            changeChat changeChatBtn.addEventListener('click', () => {
-Btn.addEventListener('click', () => {
-                mainChatScreen.classList.add('hidden');
-                chatChoice                mainChatScreen.classList.add('hidden');
+            changeChatBtn.addEventListener('click',            changeChatBtn.addEventListener('click', () => {
+                mainChatScreen.classList () => {
+                mainChatScreen.classList.add('.add('hidden');
                 chatChoiceScreen.classList.remove('hidden');
-Screen.classList.remove('hidden');
-                render                renderChatsGrid();
+                renderChathidden');
+                chatChoiceScreen.classList.remove('hidden');
+                renderChatsGrid();
             });
 
-            //ChatsGrid();
+            // отправsGrid();
             });
 
-            // отправка сообщения отправка сообщения
-            sendMsgBtn.addEventListener('click', ()
-            sendMsgBtn.addEventListener('click', () => {
-                const text = => {
+            // отправка сообщения
+            sendMsgBtn.addEventListener('click', () =>ка сообщения
+            sendMsgBtn.addEventListener('click', {
                 const text = messageInput.value.trim();
-                messageInput.value.trim();
+                if () => {
+                const text = messageInput.value.trim();
                 if (text) {
-                    if (text) {
                     addMessage(text);
-                    message addMessage(text);
+                    messageInput (text) {
+                    addMessage(text);
                     messageInput.value = '';
-                }
-            });
-
-            messageInput.value = '';
+               .value = '';
                 }
             });
 
             messageInput.addEventListener('keypress', (e) => {
-               Input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
- if (e.key === 'Enter' && !e.shiftKey) {
+                if }
+            });
+
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault.shiftKey) {
                     e.preventDefault();
-                    const text =                    e.preventDefault();
                     const text = messageInput.value.trim();
                     if (text) {
-                        addMessage(text);
-                        message messageInput.value.trim();
+                        addMessage(text();
+                    const text = messageInput.value.trim();
                     if (text) {
-                        addMessage(text);
+                        add);
                         messageInput.value = '';
-                    }
-Input.value = '';
                     }
                 }
             });
 
-            //                }
+            // СИНХРОНИЗАЦИЯ между вкладMessage(text);
+                        messageInput.value = '';
+                    }
+                }
+            });
+
+            // СИНХРОНИЗАЦИЯ между вкладками/устройствами
+            window.addEventListener('storage', (e) => {
+                ifками/устройствами
+            window.addEventListener('storage', (e) => {
+                if (e.key === STORAGE_KEY) {
+                    loadMessages();
+ (e.key === STORAGE_KEY) {
+                    loadMessages();
+                    renderMessages();
+                }
+            });
+
+                    renderMessages();
+                }
             });
 
             // инициализация
-            function init инициализация
             function init() {
-                if (nick() {
+                loadMessages();
+
+                if            // инициализация
+            function init() {
+                loadMessages();
+
                 if (nickname) {
-                   name) {
                     updateUserDisplay();
-                    welcomeScreen.classList updateUserDisplay();
+                    welcomeScreen.classList.add(' (nickname) {
+                    updateUserDisplay();
                     welcomeScreen.classList.add('hidden');
                     showChatChoice();
-               .add('hidden');
+               hidden');
                     showChatChoice();
-                } else } else {
+                } else {
+                    welcomeScreen.classList.remove } else {
                     welcomeScreen.classList.remove('hidden');
-                {
-                    welcomeScreen.classList.remove('hidden');
+               ('hidden');
                 }
 
-                const currentChat = CHATS.find(c }
+                const current }
 
-                const currentChat = CHATS.find(c => c => c.id === currentChatId) || CHATS[0];
-                currentChatEmoji.textContent = currentChat.id === currentChatId) || CHATS[0];
-                currentChatEmoji.textContent = currentChat.emoji;
-                current.emoji;
-                currentChatName.textContentChatName.textContent = currentChat.name = currentChat.name;
-            }
-
-            init();
-;
+                const currentChat = CHATS.find(c => c.id === currentChatChat = CHATS.find(c => c.id === currentChatId) || CHATS[0];
+Id) || CHATS[0];
+                currentChatEmoji.textContent = currentChat.emo                currentChatEmoji.textContent = currentChat.emoji;
+                currentChatName.textContent = currentChat.nameji;
+                currentChatName.textContent = currentChat.name;
             }
 
             init();
         })();
-           })();
+    </script>
+</;
+            }
+
+            init();
+        })();
     </script>
 </body>
-</html </script>
-</>
+</htmlbody>
+</html>
