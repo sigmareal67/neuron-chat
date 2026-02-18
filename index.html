@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Neuron · свои чаты</title>
+    <title>⚡ Neuron · файловый мессенджер</title>
     <style>
         * {
             margin: 0;
@@ -65,45 +65,114 @@
             filter: drop-shadow(0 0 8px #3f6eff);
         }
 
-        /* БОЛЬШАЯ КНОПКА С НИКОМ */
         .user-button {
             background: #1f2a44;
             border: 2px solid #3f5a8c;
             border-radius: 60px;
-            padding: 12px 28px;
+            padding: 8px 20px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
             transition: 0.2s;
-            box-shadow: 0 5px 15px #00000060;
         }
 
         .user-button:hover {
             background: #2a3b64;
             border-color: #7f9fff;
-            transform: scale(1.02);
         }
 
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             background: #3d57a0;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             border: 2px solid #8aa5ff;
         }
 
         .user-name {
             color: white;
             font-weight: 600;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
-        /* МОДАЛКА */
+        /* экран входа */
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0b0f1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .welcome-card {
+            background: #1b2745;
+            border-radius: 60px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            border: 2px solid #5f7dff;
+            box-shadow: 0 30px 60px #000000cc;
+            text-align: center;
+        }
+
+        .welcome-card h2 {
+            color: #d4e0ff;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .welcome-card p {
+            color: #9aafe6;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .welcome-card input {
+            width: 100%;
+            background: #0f1a2f;
+            border: 2px solid #3a5285;
+            padding: 18px 22px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            outline: none;
+            text-align: center;
+        }
+
+        .welcome-card input:focus {
+            border-color: #8aa5ff;
+        }
+
+        .welcome-card button {
+            background: #2f4a9e;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 100%;
+            border: 1px solid #7f97ff;
+            transition: 0.2s;
+        }
+
+        .welcome-card button:hover {
+            background: #3f60c0;
+        }
+
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -125,7 +194,6 @@
             width: 90%;
             max-width: 400px;
             border: 2px solid #5f7dff;
-            box-shadow: 0 30px 50px #000000cc;
         }
 
         .modal-content h3 {
@@ -195,7 +263,6 @@
             border-radius: 36px;
             padding: 24px;
             border: 1px solid #2a3855;
-            box-shadow: 0 10px 20px #00000040;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -216,7 +283,6 @@
             gap: 14px;
             overflow-y: auto;
             padding-right: 5px;
-            padding-bottom: 10px;
             min-height: 0;
             flex: 1;
         }
@@ -286,6 +352,8 @@
             font-size: 0.9rem;
             width: auto;
             border: 1px solid #5b79c0;
+            cursor: pointer;
+            color: white;
         }
 
         .messages-area {
@@ -337,18 +405,61 @@
             margin-top: 6px;
         }
 
-        .input-block {
+        .file-attachment {
+            margin-top: 10px;
+            background: #1a2745;
+            border-radius: 16px;
+            padding: 12px;
+            border: 1px solid #4f6eb0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .file-attachment:hover {
+            background: #22335a;
+        }
+
+        .file-icon {
+            font-size: 2rem;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            color: white;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .file-size {
+            color: #8aa0d0;
+            font-size: 0.8rem;
+        }
+
+        .file-image {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 16px;
+            margin-top: 8px;
+            cursor: pointer;
+            border: 2px solid #4f6eb0;
+        }
+
+        .input-area {
             display: flex;
             gap: 10px;
             background: #131f35;
             border-radius: 60px;
             padding: 6px;
             border: 1px solid #2b4170;
-            margin-top: 8px;
             flex-shrink: 0;
         }
 
-        .input-block input {
+        .input-area input {
             flex: 1;
             background: transparent;
             border: none;
@@ -358,16 +469,32 @@
             color: white;
         }
 
-        .input-block input::placeholder {
+        .input-area input::placeholder {
             color: #6a7fa5;
         }
 
-        .input-block button {
-            width: 60px;
+        .input-area button {
+            width: 50px;
             padding: 12px;
             background: #2f4a9e;
-            font-size: 1.4rem;
-            line-height: 1;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .file-button {
+            background: #1f3a62;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 8px;
+            display: inline-block;
+            border: 1px solid #4f7ac0;
         }
 
         .empty-chat {
@@ -384,11 +511,18 @@
             background: #3f5280;
             border-radius: 10px;
         }
+        .messages-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .messages-area::-webkit-scrollbar-thumb {
+            background: #3f5280;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="neuron-app">
-        <!-- шапка с большой кнопкой ника -->
+        <!-- ШАПКА -->
         <div class="header">
             <div class="logo">
                 <span>⚡</span>
@@ -397,6 +531,16 @@
             <div class="user-button" id="userButton">
                 <div class="user-avatar" id="userAvatar">👤</div>
                 <span class="user-name" id="userName">ник</span>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ВХОДА (КРАСИВЫЙ) -->
+        <div id="welcomeScreen" class="welcome-screen">
+            <div class="welcome-card">
+                <h2>⚡ Neuron</h2>
+                <p>введите ваш ник</p>
+                <input type="text" id="welcomeNickInput" placeholder="например: Кекс" maxlength="20">
+                <button id="welcomeEnterBtn">войти</button>
             </div>
         </div>
 
@@ -412,16 +556,7 @@
             </div>
         </div>
 
-        <!-- Экран 1: ник (только при первом входе) -->
-        <div id="nickScreen" class="screen">
-            <div class="card">
-                <h2>🔹 вход</h2>
-                <input type="text" id="nickInput" placeholder="твой ник..." maxlength="20">
-                <button id="enterNickBtn">⚡ войти</button>
-            </div>
-        </div>
-
-        <!-- Экран 2: выбор чата -->
+        <!-- ЭКРАН ВЫБОРА ЧАТА -->
         <div id="chatChoiceScreen" class="screen hidden">
             <div class="card">
                 <h2>📡 выбери чат</h2>
@@ -429,9 +564,9 @@
             </div>
         </div>
 
-        <!-- Экран 3: чат -->
+        <!-- ОСНОВНОЙ ЧАТ -->
         <div id="mainChatScreen" class="screen hidden">
-            <div class="current-chat-bar" id="currentChatBar">
+            <div class="current-chat-bar">
                 <div class="current-info">
                     <span class="current-emoji" id="currentChatEmoji">💬</span>
                     <span class="current-name" id="currentChatName">Чат 1</span>
@@ -441,10 +576,12 @@
 
             <div class="messages-area" id="messagesContainer"></div>
 
-            <div class="input-block">
-                <input type="text" id="messageInput" placeholder="сообщение..." maxlength="500">
+            <div class="input-area">
+                <input type="text" id="messageInput" placeholder="сообщение...">
                 <button id="sendMsgBtn">➤</button>
             </div>
+            <input type="file" id="fileInput" style="display: none;">
+            <button class="file-button" id="fileButton">📎 прикрепить файл</button>
         </div>
     </div>
 
@@ -461,7 +598,7 @@
                 { id: 8, name: 'Чат 8', emoji: '💬' }
             ];
 
-            const STORAGE_KEY = 'neuron_messages_final';
+            const STORAGE_KEY = 'neuron_messages_with_files';
             const NICK_KEY = 'neuron_nick';
             const CHAT_KEY = 'neuron_current_chat';
 
@@ -470,7 +607,7 @@
             let messages = {};
 
             // элементы
-            const nickScreen = document.getElementById('nickScreen');
+            const welcomeScreen = document.getElementById('welcomeScreen');
             const chatChoiceScreen = document.getElementById('chatChoiceScreen');
             const mainChatScreen = document.getElementById('mainChatScreen');
             const userName = document.getElementById('userName');
@@ -480,8 +617,8 @@
             const modalNameInput = document.getElementById('modalNameInput');
             const modalSaveBtn = document.getElementById('modalSaveBtn');
             const modalCancelBtn = document.getElementById('modalCancelBtn');
-            const nickInput = document.getElementById('nickInput');
-            const enterNickBtn = document.getElementById('enterNickBtn');
+            const welcomeNickInput = document.getElementById('welcomeNickInput');
+            const welcomeEnterBtn = document.getElementById('welcomeEnterBtn');
             const chatsGrid = document.getElementById('chatsGrid');
             const currentChatEmoji = document.getElementById('currentChatEmoji');
             const currentChatName = document.getElementById('currentChatName');
@@ -489,7 +626,10 @@
             const messagesContainer = document.getElementById('messagesContainer');
             const messageInput = document.getElementById('messageInput');
             const sendMsgBtn = document.getElementById('sendMsgBtn');
+            const fileInput = document.getElementById('fileInput');
+            const fileButton = document.getElementById('fileButton');
 
+            // загрузка сообщений
             function loadMessages() {
                 const saved = localStorage.getItem(STORAGE_KEY);
                 if (saved) {
@@ -507,6 +647,16 @@
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
             }
 
+            // форматирование размера файла
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 B';
+                const k = 1024;
+                const sizes = ['B', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+            }
+
+            // отрисовка сообщений
             function renderMessages() {
                 const key = 'chat_' + currentChatId;
                 const chatMessages = messages[key] || [];
@@ -520,31 +670,77 @@
                 chatMessages.forEach(msg => {
                     const div = document.createElement('div');
                     div.className = `message ${msg.author === nickname ? 'own' : ''}`;
-                    div.innerHTML = `
-                        <div class="msg-author">${escapeHTML(msg.author)}</div>
-                        <div class="msg-text">${escapeHTML(msg.text)}</div>
-                        <div class="msg-time">${escapeHTML(msg.time)}</div>
-                    `;
+
+                    let content = `<div class="msg-author">${escapeHTML(msg.author)}</div>`;
+
+                    if (msg.text) {
+                        content += `<div class="msg-text">${escapeHTML(msg.text)}</div>`;
+                    }
+
+                    if (msg.file) {
+                        if (msg.file.type.startsWith('image/')) {
+                            content += `<img src="${escapeHTML(msg.file.data)}" class="file-image" onclick="window.open(this.src)">`;
+                        } else {
+                            content += `
+                                <div class="file-attachment" onclick="window.open('${escapeHTML(msg.file.data)}')">
+                                    <div class="file-icon">📎</div>
+                                    <div class="file-info">
+                                        <div class="file-name">${escapeHTML(msg.file.name)}</div>
+                                        <div class="file-size">${escapeHTML(msg.file.size)}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+
+                    content += `<div class="msg-time">${escapeHTML(msg.time)}</div>`;
+                    div.innerHTML = content;
                     messagesContainer.appendChild(div);
                 });
 
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
 
-            function addMessage(text) {
-                if (!text.trim()) return;
+            // добавление сообщения
+            function addMessage(text = '', fileData = null) {
                 const key = 'chat_' + currentChatId;
                 const msg = {
                     id: Date.now() + Math.random(),
                     author: nickname || 'аноним',
-                    text: text.trim(),
                     time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
                 };
+
+                if (text) msg.text = text;
+                if (fileData) msg.file = fileData;
+
                 messages[key].push(msg);
                 saveMessages();
                 renderMessages();
             }
 
+            // обработка файла
+            fileButton.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    addMessage('', {
+                        name: file.name,
+                        size: formatFileSize(file.size),
+                        type: file.type,
+                        data: ev.target.result
+                    });
+                    fileInput.value = '';
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // отрисовка сетки чатов
             function renderChatsGrid() {
                 chatsGrid.innerHTML = '';
                 CHATS.forEach(chat => {
@@ -582,7 +778,6 @@
 
             function updateUserDisplay() {
                 userName.textContent = nickname || 'ник';
-                // первую букву ника в аватар
                 if (nickname && nickname.length > 0) {
                     userAvatar.textContent = nickname.charAt(0).toUpperCase();
                 } else {
@@ -591,7 +786,6 @@
             }
 
             function hideAllScreens() {
-                nickScreen.classList.add('hidden');
                 chatChoiceScreen.classList.add('hidden');
                 mainChatScreen.classList.add('hidden');
             }
@@ -602,15 +796,31 @@
                 renderChatsGrid();
             }
 
-            // открыть модалку
+            // вход
+            welcomeEnterBtn.addEventListener('click', () => {
+                const nick = welcomeNickInput.value.trim();
+                if (nick) {
+                    nickname = nick;
+                    localStorage.setItem(NICK_KEY, nick);
+                    updateUserDisplay();
+                    welcomeScreen.classList.add('hidden');
+                    showChatChoice();
+                }
+            });
+
+            welcomeNickInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    welcomeEnterBtn.click();
+                }
+            });
+
+            // смена имени
             userButton.addEventListener('click', () => {
                 if (!nickname) return;
                 modalNameInput.value = nickname;
                 nameModal.classList.remove('hidden');
-                modalNameInput.focus();
             });
 
-            // сохранить новое имя
             modalSaveBtn.addEventListener('click', () => {
                 const newNick = modalNameInput.value.trim();
                 if (newNick) {
@@ -621,26 +831,13 @@
                 }
             });
 
-            // отмена
             modalCancelBtn.addEventListener('click', () => {
                 nameModal.classList.add('hidden');
             });
 
-            // закрыть по клику на оверлей
             nameModal.addEventListener('click', (e) => {
                 if (e.target === nameModal) {
                     nameModal.classList.add('hidden');
-                }
-            });
-
-            // вход
-            enterNickBtn.addEventListener('click', () => {
-                const nick = nickInput.value.trim();
-                if (nick) {
-                    nickname = nick;
-                    localStorage.setItem(NICK_KEY, nick);
-                    updateUserDisplay();
-                    showChatChoice();
                 }
             });
 
@@ -651,18 +848,47 @@
                 renderChatsGrid();
             });
 
-            // отправка
+            // отправка сообщения
             sendMsgBtn.addEventListener('click', () => {
-                addMessage(messageInput.value);
-                messageInput.value = '';
-            });
-
-            messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    addMessage(messageInput.value);
+                const text = messageInput.value.trim();
+                if (text) {
+                    addMessage(text);
                     messageInput.value = '';
                 }
             });
+
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    const text = messageInput.value.trim();
+                    if (text) {
+                        addMessage(text);
+                        messageInput.value = '';
+                    }
+                }
+            });
+
+            // синхронизация между вкладками
+            window.addEventListener('storage', (e) => {
+                if (e.key === STORAGE_KEY) {
+                    loadMessages();
+                    renderMessages();
+                }
+            });
+
+            // периодическая проверка (на всякий случай)
+            setInterval(() => {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    try {
+                        const newMessages = JSON.parse(saved);
+                        if (JSON.stringify(newMessages) !== JSON.stringify(messages)) {
+                            messages = newMessages;
+                            renderMessages();
+                        }
+                    } catch {}
+                }
+            }, 1000);
 
             // инициализация
             function init() {
@@ -670,10 +896,10 @@
 
                 if (nickname) {
                     updateUserDisplay();
+                    welcomeScreen.classList.add('hidden');
                     showChatChoice();
                 } else {
-                    nickScreen.classList.remove('hidden');
-                    updateUserDisplay(); // покажет "ник"
+                    welcomeScreen.classList.remove('hidden');
                 }
 
                 const currentChat = CHATS.find(c => c.id === currentChatId) || CHATS[0];
